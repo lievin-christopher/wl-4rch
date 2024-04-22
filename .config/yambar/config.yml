@@ -1,0 +1,400 @@
+# Colors
+## black
+color0:  &color0  0F1111FF
+color8:  &color8  709080FF
+## red
+color1:  &color1  BF616AFF
+color9:  &color9  BF616AFF
+## green
+color2:  &color2  60B48AFF
+color10: &color10 92BE6DFF
+## yellow 
+color3:  &color3  EBBE65FF
+color11: &color11 EBBE65FF
+## blue
+color4:  &color4  02C9FFFF
+color12: &color12 02B9EBFF
+## magenta
+color5:  &color5  9285FFFF
+color13: &color13 9285FFFF
+## cyan
+color6:  &color6  76E2FFFF
+color14: &color14 C0F2FFFF
+## white
+color7:  &color7  DCDCCCFF
+color15: &color15 9285FFFF
+
+bar:
+  height: 17
+  location: top
+  left-spacing:  5
+  right-spacing: 5
+  margin: 2
+  font: Hack Nerd Font:pixelsize=10;2,Noto Color Emoji:pixelsize=10;2
+  foreground: *color7
+  background: *color0
+
+  left:
+    - i3:
+        sort: native
+        content:
+          "":
+            map:
+              default: {string: {text: " {name} ",on-click: {
+                                              left: "swaymsg workspace {name}",
+                                              wheel-up: "swaymsg workspace next",
+                                              wheel-down: "swaymsg workspace prev"
+                                            }}}
+              conditions:
+                name  == "1" && state == focused: {string: {text: "  ",foreground: *color4,on-click: {
+                                                left: "swaymsg workspace {name}",
+                                                wheel-up: "swaymsg workspace next",
+                                                wheel-down: "swaymsg workspace prev"
+                                              }}}
+                name  == "1" && state == urgent:  {string: {text: "  ",foreground: *color5,on-click: {
+                                                left: "swaymsg workspace {name}",
+                                                wheel-up: "swaymsg workspace next",
+                                                wheel-down: "swaymsg workspace prev"
+                                              }}}
+                name  == "2" && state == focused: {string: {text: "  ",foreground: *color4,on-click: {
+                                                left: "swaymsg workspace {name}",
+                                                wheel-up: "swaymsg workspace next",
+                                                wheel-down: "swaymsg workspace prev"
+                                              }}}
+                name  == "2" && state == urgent:  {string: {text: "  ",foreground: *color5,on-click: {
+                                                left: "swaymsg workspace {name}",
+                                                wheel-up: "swaymsg workspace next",
+                                                wheel-down: "swaymsg workspace prev"
+                                              }}}
+                name  == "3" && state == focused: {string: {text: " 󰕼 ",foreground: *color4,on-click: {
+                                                left: "swaymsg workspace {name}",
+                                                wheel-up: "swaymsg workspace next",
+                                                wheel-down: "swaymsg workspace prev"
+                                              }}}
+                name  == "3" && state == urgent:  {string: {text: " 󰕼 ",foreground: *color5,on-click: {
+                                                left: "swaymsg workspace {name}",
+                                                wheel-up: "swaymsg workspace next",
+                                                wheel-down: "swaymsg workspace prev"
+                                              }}}
+                name  == "1": {string: {text: "  ",on-click: {
+                                                left: "swaymsg workspace {name}",
+                                                wheel-up: "swaymsg workspace next",
+                                                wheel-down: "swaymsg workspace prev"
+                                              }}}
+                name  == "2": {string: {text: "  ",on-click: {
+                                                left: "swaymsg workspace {name}",
+                                                wheel-up: "swaymsg workspace next",
+                                                wheel-down: "swaymsg workspace prev"
+                                              }}}
+                name  == "3": {string: {text: " 󰕼 ",on-click: {
+                                                left: "swaymsg workspace {name}",
+                                                wheel-up: "swaymsg workspace next",
+                                                wheel-down: "swaymsg workspace prev"
+                                              }}}
+                state == focused: {string: {text: " {name} ",foreground: *color4,on-click: {
+                                                left: "swaymsg workspace {name}",
+                                                wheel-up: "swaymsg workspace next",
+                                                wheel-down: "swaymsg workspace prev"
+                                              }}}
+                state == urgent:  {string: {text: " {name} ",foreground: *color5,on-click: {
+                                                left: "swaymsg workspace {name}",
+                                                wheel-up: "swaymsg workspace next",
+                                                wheel-down: "swaymsg workspace prev"
+                                              }}}
+                
+
+  center:
+    - clock:
+        time-format: "%H:%M:%S"
+        date-format: "%a %d %b %Y"
+        content:
+          list:
+              items:
+                  - string: {text: "────[ "}
+                  - string: {
+                      text: "{date} ",
+                      foreground: *color6,
+                      on-click: "~/.config/sway/scripts/sway-sensible-terminal --title '__calendar__' -e bash -c 'task calendar && task list; read'"
+                      }
+                  - string: {
+                      text: "{time}",
+                      foreground: *color1,
+                      on-click: "~/.config/sway/scripts/sway-sensible-terminal --title '__calendar__' -e bash -c 'task calendar && task list; read'"
+                      }
+                  - string: {text: " ]────"}
+
+  right:
+    - script:
+        poll-interval: 10000
+        path: ~/.config/yambar/scripts/weather.py
+        args: []
+        content: 
+          map:
+            conditions:
+              temp < 5:
+                string: {text: "{weather}{temp}°C",foreground: *color6,on-click: "{action}"}
+              temp < 15:
+                string: {text: "{weather}{temp}°C",foreground: *color4,on-click: "{action}"}
+              temp < 20:
+                string: {text: "{weather}{temp}°C",foreground: *color2,on-click: "{action}"}
+              temp >= 20:
+                string: {text: "{weather}{temp}°C",foreground: *color1,on-click: "{action}"}
+            default: {string: {text: "{weather}{temp}",foreground: *color1,on-click: "{action}"}}
+
+    - cpu:
+        poll-interval: 1000
+        content:
+          map:
+            conditions:
+              id == -1:
+                  - string: {
+                      text: "󰻠 {cpu}%",
+                      foreground: *color4,
+                      on-click: "~/.config/sway/scripts/sway-sensible-terminal --title '__monitor__' -e htop"
+                      }
+
+    - mem:
+        poll-interval: 1000
+        content:
+            - string: {
+                text: " {percent_used}%",
+                foreground: *color5,
+                on-click: "~/.config/sway/scripts/sway-sensible-terminal --title '__monitor__' -e htop"
+                }
+
+    - script:
+        poll-interval: 1000
+        path: ~/.config/yambar/scripts/temp.sh
+        args: []
+        content: 
+          map:
+            conditions:
+              temp < "15.0":
+                string: {text: " {temp}",foreground: *color6}
+              temp < "30.0":
+                string: {text: " {temp}",foreground: *color4}
+              temp < "45.0":
+                string: {text: " {temp}",foreground: *color2}
+              temp < "60.0":
+                string: {text: " {temp}",foreground: *color5}
+              temp >= "60.0":
+                string: {text: " {temp}",foreground: *color1}
+
+    - pipewire:
+        content:
+          list:
+            items:
+              - map:
+                  conditions:
+                    type == "sink":
+                      map:
+                        conditions:
+                          icon == "audio-headset-bluetooth":
+                            string: {text: "🎧  "}
+                          muted: {
+                            string: {
+                              text: "󰝟 ",
+                              foreground: *color1,
+                              on-click: {
+                                left: "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle",
+                                wheel-up: "wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%+ unmute",
+                                wheel-down: "wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%- unmute"
+                              }
+                            }
+                          }
+                        default:
+                          - ramp:
+                              tag: cubic_volume
+                              items:
+                                - string: {
+                                    text: "󰕿 {cubic_volume}%",
+                                    foreground: *color1,
+                                    on-click: {
+                                      left: "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle",
+                                      wheel-up: "wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%+ unmute",
+                                      wheel-down: "wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%- unmute"
+                                    }
+                                  }
+                                - string: {
+                                    text: " {cubic_volume}%",
+                                    foreground: *color2,
+                                    on-click: {
+                                        left: "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle",
+                                        wheel-up: "wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%+ unmute",
+                                        wheel-down: "wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%- unmute"
+                                      }
+                                    }                                
+                                - string: {
+                                    text: "󰕾 {cubic_volume}%",
+                                    foreground: *color2,
+                                    on-click: {
+                                        left: "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle",
+                                        wheel-up: "wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%+ unmute",
+                                        wheel-down: "wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%- unmute"
+                                      }
+                                    } 
+                                - string: {
+                                    text: " {cubic_volume}%",
+                                    foreground: *color4,
+                                    on-click: {
+                                        left: "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle",
+                                        wheel-up: "wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%+ unmute",
+                                        wheel-down: "wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%- unmute"
+                                      }
+                                    } 
+                                - string: {
+                                    text: " {cubic_volume}%",
+                                    foreground: *color5,
+                                    on-click: {
+                                        left: "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle",
+                                        wheel-up: "wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%+ unmute",
+                                        wheel-down: "wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%- unmute"
+                                      }
+                                    }
+
+    - backlight:
+        name: intel_backlight
+        content:
+            - ramp:
+                tag: percent
+                items:
+                  - string: {
+                      text: " {percent}%",
+                      foreground: *color5,
+                      on-click: {
+                          wheel-up: "brightnessctl s +10%",
+                          wheel-down: "brightnessctl s 10%-"
+                        }                      
+                      }
+                  - string: {
+                      text: " {percent}%",
+                      foreground: *color5,
+                      on-click: {
+                          wheel-up: "brightnessctl s +10%",
+                          wheel-down: "brightnessctl s 10%-"
+                        }                      
+                      }
+                  - string: {
+                      text: " {percent}%",
+                      foreground: *color5,
+                      on-click: {
+                          wheel-up: "brightnessctl s +10%",
+                          wheel-down: "brightnessctl s 10%-"
+                        }                      
+                      }
+                  - string: {
+                      text: " {percent}%",
+                      foreground: *color4,
+                      on-click: {
+                          wheel-up: "brightnessctl s +10%",
+                          wheel-down: "brightnessctl s 10%-"
+                        }                      
+                      }
+                  - string: {
+                      text: " {percent}%",
+                      foreground: *color4,
+                      on-click: {
+                          wheel-up: "brightnessctl s +10%",
+                          wheel-down: "brightnessctl s 10%-"
+                        }                      
+                      }
+
+    - script:
+        poll-interval: 10000
+        path: ~/.config/yambar/scripts/vpn_status.sh
+        args: []
+        content: 
+          map:
+            conditions:
+              type == "wireguard":
+                string: {text: "{icon}",foreground: *color12,on-click: "{action}"}
+              temp == "openvpn":
+                string: {text: "{icon}",foreground: *color2,on-click: "{action}"}
+              temp == "none":
+                string: {text: "{icon}",foreground: *color1,on-click: "{action}"}
+
+    - network:
+        poll-interval: 1000
+        content:
+            map:
+              conditions:
+                state == "down" && name >= "wl":
+                    - string: {text: "󰤮  ", foreground: *color1,on-click: "~/.config/sway/scripts/sway-sensible-terminal --title '__wifi_menu__' -e sudo wifi-menu {name}"}
+                state == "down":
+                    - string: {text: "  ", foreground: *color1}
+                state == "up" && name >= "wl":
+                    - ramp:
+                        tag: quality
+                        items:
+                          - string: {text: "󰤯 ", foreground: *color2,on-click: "~/.config/sway/scripts/sway-sensible-terminal --title '__wifi_menu__' -e sudo iftop -i {name}"}
+                          - string: {text: "󰤟 ", foreground: *color2,on-click: "~/.config/sway/scripts/sway-sensible-terminal --title '__wifi_menu__' -e sudo iftop -i {name}"}
+                          - string: {text: "󰤢 ", foreground: *color2,on-click: "~/.config/sway/scripts/sway-sensible-terminal --title '__wifi_menu__' -e sudo iftop -i {name}"}
+                          - string: {text: "󰤥 ", foreground: *color2,on-click: "~/.config/sway/scripts/sway-sensible-terminal --title '__wifi_menu__' -e sudo iftop -i {name}"}
+                          - string: {text: "󰤨 ", foreground: *color2,on-click: "~/.config/sway/scripts/sway-sensible-terminal --title '__wifi_menu__' -e sudo iftop -i {name}"}
+                    - map:
+                        default: {string: {text: "{dl-speed:kib:.0}KB/s ", foreground: *color4,on-click: "~/.config/sway/scripts/sway-sensible-terminal --title '__wifi_menu__' -e sudo iftop -i {name}"}}
+                        conditions:
+                          dl-speed > 1073741824:
+                            string: {text: "{dl-speed:gib:.0}GB/s ", foreground: *color4,on-click: "~/.config/sway/scripts/sway-sensible-terminal --title '__wifi_menu__' -e sudo iftop -i {name}"}
+                          dl-speed > 1048576:
+                            string: {text: "{dl-speed:mib:.0}MB/s ", foreground: *color4,on-click: "~/.config/sway/scripts/sway-sensible-terminal --title '__wifi_menu__' -e sudo iftop -i {name}"}
+                    - map:
+                        default: {string: {text: "{ul-speed:kib:.0}KB/s ", foreground: *color5,on-click: "~/.config/sway/scripts/sway-sensible-terminal --title '__wifi_menu__' -e sudo iftop -i {name}"}}
+                        conditions:
+                          ul-speed > 1073741824:
+                            string: {text: "{ul-speed:gib:.0}GB/s ", foreground: *color5,on-click: "~/.config/sway/scripts/sway-sensible-terminal --title '__wifi_menu__' -e sudo iftop -i {name}"}
+                          ul-speed > 1048576:
+                            string: {text: "{ul-speed:mib:.0}MB/s ", foreground: *color5,on-click: "~/.config/sway/scripts/sway-sensible-terminal --title '__wifi_menu__' -e sudo iftop -i {name}"}
+
+                state == "up":
+                    - string: {text: " ", foreground: *color2,on-click: "~/.config/sway/scripts/sway-sensible-terminal --title '__wifi_menu__' -e sudo iftop -i {name}"}
+                    - map:
+                        default: {string: {text: "{dl-speed:kib:.0}KB/s ", foreground: *color4,on-click: "~/.config/sway/scripts/sway-sensible-terminal --title '__wifi_menu__' -e sudo iftop -i {name}"}}
+                        conditions:
+                          dl-speed > 1073741824:
+                            string: {text: "{dl-speed:gib:.0}GB/s ", foreground: *color4,on-click: "~/.config/sway/scripts/sway-sensible-terminal --title '__wifi_menu__' -e sudo iftop -i {name}"}
+                          dl-speed > 1048576:
+                            string: {text: "{dl-speed:mib:.0}MB/s ", foreground: *color4,on-click: "~/.config/sway/scripts/sway-sensible-terminal --title '__wifi_menu__' -e sudo iftop -i {name}"}
+                    - map:
+                        default: {string: {text: "{ul-speed:kib:.0}KB/s ", foreground: *color5,on-click: "~/.config/sway/scripts/sway-sensible-terminal --title '__wifi_menu__' -e sudo iftop -i {name}"}}
+                        conditions:
+                          ul-speed > 1073741824:
+                            string: {text: "{ul-speed:gib:.0}GB/s ", foreground: *color5,on-click: "~/.config/sway/scripts/sway-sensible-terminal --title '__wifi_menu__' -e sudo iftop -i {name}"}
+                          ul-speed > 1048576:
+                            string: {text: "{ul-speed:mib:.0}MB/s ", foreground: *color5,on-click: "~/.config/sway/scripts/sway-sensible-terminal --title '__wifi_menu__' -e sudo iftop -i {name}"}
+
+    - battery:
+        name: BAT0
+        poll-interval: 1000
+        content:
+          map:
+            conditions:
+              state == "unknown" && ~model:
+                - string: {text: ""}
+              state == "unknown" || state == "discharging" || state == "not charging":
+                - ramp:
+                    tag: capacity
+                    items:
+                      - string: {text: " {capacity}%",foreground: *color1}
+                      - string: {text: " {capacity}%",foreground: *color5}
+                      - string: {text: " {capacity}%",foreground: *color3}
+                      - string: {text: " {capacity}%",foreground: *color4}
+                      - string: {text: " {capacity}%",foreground: *color2}
+              state == "charging":
+                map:
+                  conditions:
+                    capacity > 80:
+                      - string:
+                          {text: "CHG HIGH {capacity}% [{estimate}]"}
+                    capacity <= 80:
+                      - string:
+                          {text: "CHG {capacity}% [{estimate}]"}
+              state == "full":
+                - string: { text: "  {capacity}%",foreground: *color2 }
+
+    - label:
+        content:
+          - string:
+              on-click: bash -c "PATH=~/.config/bemenu/powermenu /usr/bin/bemenu-run -c -i -l 20 -W 0.25 --fixed-height --fn 'Hack Nerd Font 9' -p '' --tb '#285577' --hb '#285577' --tf '#eeeeee' --hf '#eeeeee' --nf '#bbbbbb'"
+              text: " "
+              foreground: *color1
