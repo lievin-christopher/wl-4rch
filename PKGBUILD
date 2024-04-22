@@ -31,7 +31,7 @@ depends+=('oh-my-zsh-git') #AUR
 depends+=('yambar-wayland' 'swayimg' 'sway' 'swaybg' 'wlsunset' 'hyprlock' 'brightnessctl' 'bemenu-wayland')
 depends+=('grimshot' 'yambar-wayland' 'wl-clipboard-rs') #AUR
 ## Universal
-depends+=('screenfetch' 'pipewire' 'pipewire-audio' 'pipewire-pulse' 'wireplumber' 'python-requests' 'dialog' 'light' 'dunst')
+depends+=('screenfetch' 'pipewire' 'pipewire-audio' 'pipewire-pulse' 'wireplumber' 'python-requests' 'dialog' 'dunst')
 # Fonts
 depends+=('ttf-hack-nerd' 'noto-fonts' 'noto-fonts-cjk' 'noto-fonts-emoji')
 # Virtualisation
