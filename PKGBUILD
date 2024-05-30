@@ -57,27 +57,27 @@ optdepends+=('krita')
 optdepends+=('rxvt-unicode-patched-with-scrolling' 'urxvt-perls' 'urxvt-resize-font-git')
 
 package() {
-  ls $srcdir/4rch-master
+  ls $srcdir/wl-4rch-main
   mkdir -p $pkgdir$HOME/
   mkdir -p $pkgdir/etc/{lxc,default}
   chmod 700 $pkgdir$HOME/
   # Install config files and directories
-  rsync -av $srcdir/4rch-master/.config $pkgdir$HOME/
+  rsync -av $srcdir/wl-4rch-main/.config $pkgdir$HOME/
   chmod 700 $pkgdir$HOME/.config
-  rsync -av $srcdir/4rch-master/.local $pkgdir$HOME/
+  rsync -av $srcdir/wl-4rch-main/.local $pkgdir$HOME/
   chmod 700 $pkgdir$HOME/.local
   ## mpd + ncmpcpp
   mkdir -p $pkgdir/opt/mpd/playlists
   touch $pkgdir/opt/mpd/mpd.log $pkgdir/opt/mpd/mpd.db
   mkdir -p $pkgdir/opt/mpd/lyrics
   mkdir -p $pkgdir$HOME/Music
-  rsync -av $srcdir/4rch-master/.ncmpcpp $pkgdir$HOME/
+  rsync -av $srcdir/wl-4rch-main/.ncmpcpp $pkgdir$HOME/
   ## Daily script
-  install -m640 "$srcdir/4rch-master/.taskrc" -t "$pkgdir$HOME/"
+  install -m640 "$srcdir/wl-4rch-main/.taskrc" -t "$pkgdir$HOME/"
   chown -R $USER:users $pkgdir$HOME
-  install -m644 "$srcdir/4rch-master/dnsmasq.conf" -t "$pkgdir/etc/"
-  install -m644 "$srcdir/4rch-master/default.conf" -t "$pkgdir/etc/lxc/"
-  install -m644 "$srcdir/4rch-master/lxc-net" -t "$pkgdir/etc/default/"
+  install -m644 "$srcdir/wl-4rch-main/dnsmasq.conf" -t "$pkgdir/etc/"
+  install -m644 "$srcdir/wl-4rch-main/default.conf" -t "$pkgdir/etc/lxc/"
+  install -m644 "$srcdir/wl-4rch-main/lxc-net" -t "$pkgdir/etc/default/"
   dialog --create-rc $pkgdir$HOME/.dialogrc
   dialog --create-rc $pkgdir/etc/dialogrc
 }
@@ -85,16 +85,16 @@ package() {
 post_install() {
 	echo -en "music_directory " > $pkgdir/etc/mpd.conf
 	echo "\"$HOME/Music\"" >>  $pkgdir/etc/mpd.conf
-	cat $srcdir/4rch-master/mpd.conf >>  $pkgdir/etc/mpd.conf
+	cat $srcdir/wl-4rch-main/mpd.conf >>  $pkgdir/etc/mpd.conf
     sed --in-place=.pacsave 's/arch.pool.ntp.org/fr.pool.ntp.org iburst/' $pkgdir/etc/ntp.conf 
 	chown mpd /etc/mpd.conf
 	chown -R mpd /opt/mpd
-	install -m644 "$srcdir/4rch-master/bepo.gkb" "/boot/grub/bepo.gkb"
-	install -m644 "$srcdir/4rch-master/grub" "/etc/default/grub"
+	install -m644 "$srcdir/wl-4rch-main/bepo.gkb" "/boot/grub/bepo.gkb"
+	install -m644 "$srcdir/wl-4rch-main/grub" "/etc/default/grub"
 	echo "insmod keylayouts" >> /etc/grub.d/40_custom
 	echo "keymap /boot/grub/bepo.gkb" >> /etc/grub.d/40_custom
 	grub-mkconfig -o /boot/grub/grub.cfg
-	install -m600 "$srcdir/4rch-master/iftop" "/etc/sudoers.d/iftop"
+	install -m600 "$srcdir/wl-4rch-main/iftop" "/etc/sudoers.d/iftop"
 	systemctl enable mpd.service
 	systemctl enable mpd.socket
 	systemctl enable lxc-net.service
