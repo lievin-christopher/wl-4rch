@@ -198,7 +198,7 @@ bindsym XF86Explorer exec --no-startup-id firefox-developer-edition
 exec --no-startup-id dunst
 output "*" bg ~/.config/sway/back.jpg fill
 exec --no-startup-id wlsunset -t 4500
-exec_always --no-startup-id sh -c "killall yambar;LANG=en_GB.UTF-8 yambar 2> /dev/null &"
+exec_always --no-startup-id sh -c "killall yambar;LANG=en_US.UTF-8 yambar 2> /dev/null &"
 smart_borders no_gaps
 gaps outer 2
 gaps inner 5

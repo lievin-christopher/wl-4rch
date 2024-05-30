@@ -1,6 +1,6 @@
 # Maintainer: Lievin Christopher <lievin.christopher@gmail.com>
 pkgname=wl-4rch
-pkgver=0.1
+pkgver=0.2
 pkgrel=0
 pkgdesc="Autoconfig new archlinux installation"
 arch=('x86_64')
@@ -80,6 +80,8 @@ package() {
   install -m644 "$srcdir/wl-4rch-main/lxc-net" -t "$pkgdir/etc/default/"
   dialog --create-rc $pkgdir$HOME/.dialogrc
   dialog --create-rc $pkgdir/etc/dialogrc
+  mkdir -p "$pkgdir/usr/local/share/fonts/"
+  install -m644 "$srcdir/wl-4rch-main/UBraille.ttf" -t "$pkgdir/usr/local/share/fonts/"
 }
 
 post_install() {
