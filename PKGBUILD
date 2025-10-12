@@ -1,6 +1,6 @@
 # Maintainer: Lievin Christopher <lievin.christopher@gmail.com>
 pkgname=wl-4rch
-pkgver=0.2
+pkgver=0.3
 pkgrel=0
 pkgdesc="Autoconfig new archlinux installation"
 arch=('x86_64')
@@ -37,9 +37,9 @@ depends+=('ttf-hack-nerd' 'noto-fonts' 'noto-fonts-cjk' 'noto-fonts-emoji')
 # Virtualisation
 depends+=('qemu' 'lxc' 'arch-install-scripts')
 # GUI Apps
-depends+=('vlc' 'p7zip' 'ranger'  'rxvt-unicode-terminfo' 'alacritty' 'firefox-developer-edition')
+depends+=('p7zip' 'ranger'  'rxvt-unicode-terminfo' 'alacritty' 'firefox-developer-edition')
 # Multimedia
-depends+=('w3m' 'mpd' 'ffmpeg' 'ncmpcpp' 'mpc')
+depends+=('mpv' 'w3m' 'mpd' 'ffmpeg' 'ncmpcpp' 'mpc')
 # Android
 depends+=('android-file-transfer' 'android-udev' 'android-tools')
 # Optional packages
@@ -51,8 +51,8 @@ optdepends+=('bat' 'gtop' 'ldm')
 optdepends+=('filezilla')
 ### Office
 optdepends+=('wps-office')
-### Images
-optdepends+=('krita')
+### Multimedia
+optdepends+=('krita' 'vlc')
 ## Old Urxvt Variant
 optdepends+=('rxvt-unicode-patched-with-scrolling' 'urxvt-perls' 'urxvt-resize-font-git')
 

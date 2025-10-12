@@ -86,27 +86,47 @@ bindsym $mod+space focus mode_toggle
 
 # switch to workspace
 bindsym $mod+ampersand workspace 1
+bindsym $mod+1 workspace 1
 bindsym $mod+eacute workspace 2
+bindsym $mod+2 workspace 2
 bindsym $mod+quotedbl workspace 3
+bindsym $mod+3 workspace 3
 bindsym $mod+apostrophe workspace 4
+bindsym $mod+4 workspace 4
 bindsym $mod+parenleft workspace 5
+bindsym $mod+5 workspace 5
 bindsym $mod+minus workspace 6
+bindsym $mod+6 workspace 6
 bindsym $mod+egrave workspace 7
+bindsym $mod+7 workspace 7
 bindsym $mod+underscore workspace 8
+bindsym $mod+8 workspace 8
 bindsym $mod+ccedilla workspace 9
+bindsym $mod+9 workspace 9
 bindsym $mod+agrave workspace 10
+bindsym $mod+0 workspace 10
 
 # move focused container to workspace
 bindsym $mod+Shift+ampersand move container to workspace 1
+bindsym $mod+Shift+1 move container to workspace 1
 bindsym $mod+Shift+eacute move container to workspace 2
+bindsym $mod+Shift+2 move container to workspace 2
 bindsym $mod+Shift+quotedbl move container to workspace 3
+bindsym $mod+Shift+3 move container to workspace 3
 bindsym $mod+Shift+apostrophe move container to workspace 4
+bindsym $mod+Shift+4 move container to workspace 4
 bindsym $mod+Shift+parenleft move container to workspace 5
+bindsym $mod+Shift+5 move container to workspace 5
 bindsym $mod+Shift+minus move container to workspace 6
+bindsym $mod+Shift+6 move container to workspace 6
 bindsym $mod+Shift+egrave move container to workspace 7
+bindsym $mod+Shift+7 move container to workspace 7
 bindsym $mod+Shift+underscore move container to workspace 8
+bindsym $mod+Shift+8 move container to workspace 8
 bindsym $mod+Shift+ccedilla move container to workspace 9
+bindsym $mod+Shift+9 move container to workspace 9
 bindsym $mod+Shift+agrave move container to workspace 10
+bindsym $mod+Shift+0 move container to workspace 10
 
 # reload the configuration file
 bindsym $mod+Shift+c reload
@@ -176,28 +196,33 @@ bindsym $mod+w mode "workspace"
 
 
 # Pipewire Audio controls
-bindsym XF86AudioRaiseVolume exec --no-startup-id wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%+ unmute #increase sound volume
+bindsym XF86AudioMute        exec --no-startup-id wpctl set-mute   @DEFAULT_AUDIO_SINK@ toggle     # mute/unmute sound
+bindsym $mod+F1              exec --no-startup-id wpctl set-mute   @DEFAULT_AUDIO_SINK@ toggle     # mute/unmute sound
 bindsym XF86AudioLowerVolume exec --no-startup-id wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%- unmute #decrease sound volume
-bindsym XF86AudioMute exec --no-startup-id wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle # mute/unmute sound
+bindsym $mod+F2              exec --no-startup-id wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%- unmute #decrease sound volume
+bindsym XF86AudioRaiseVolume exec --no-startup-id wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%+ unmute #increase sound volume
+bindsym $mod+F3              exec --no-startup-id wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%+ unmute #increase sound volume
 
 # Sreen brightness controls
-bindsym XF86MonBrightnessUp exec brightnessctl s +10% # increase screen brightness
+bindsym XF86MonBrightnessUp   exec brightnessctl s +10% # increase screen brightness
 bindsym XF86MonBrightnessDown exec brightnessctl s 10%- # decrease screen brightness
 
 # Media player controls
-bindsym XF86AudioPlay exec playerct play
+bindsym XF86AudioPlay  exec playerct play
 bindsym XF86AudioPause exec playerctl pause
-bindsym XF86AudioNext exec playerctl next
-bindsym XF86AudioPrev exec playerctl previous
+bindsym XF86AudioNext  exec playerctl next
+bindsym XF86AudioPrev  exec playerctl previous
 
-bindsym XF86WWW exec --no-startup-id firefox-developer-edition
+bindsym XF86WWW        exec --no-startup-id firefox-developer-edition
 bindsym XF86Calculator exec --no-startup-id ~/.config/sway/scripts/sway-sensible-terminal -e python
-bindsym XF86Explorer exec --no-startup-id firefox-developer-edition
+bindsym $mod+F4        exec --no-startup-id ~/.config/sway/scripts/sway-sensible-terminal -e python
+bindsym XF86Explorer   exec --no-startup-id firefox-developer-edition
 
 # General
 exec --no-startup-id dunst
 output "*" bg ~/.config/sway/back.jpg fill
 exec --no-startup-id wlsunset -t 4500
+exec --no-startup-id swayidle -w timeout 300 'swaymsg "output * dpms off"' resume 'swaymsg "output * dpms on"'
 exec_always --no-startup-id sh -c "killall yambar;LANG=en_US.UTF-8 yambar 2> /dev/null &"
 smart_borders no_gaps
 gaps outer 2
@@ -208,6 +233,11 @@ for_window [title="^__calendar__"] floating enable,move position center,move up 
 for_window [title="^__weather__"] floating enable,move position center,move up 320 px,move right 880 px
 for_window [title="^__monitor__"] floating enable,move position center,move up 490 px,move right 840 px
 for_window [title="^__wifi_menu__"] floating enable,move position center,move up 490 px,move right 840 px
+## Display 1920x1080 ##
+#for_window [title="^__calendar__"] floating enable,move position center,move up 310 px
+#for_window [title="^__weather__"] floating enable,move position center,move up 175 px,move right 560 px
+#for_window [title="^__monitor__"] floating enable,move position center,move up 319 px,move right 520 px
+#for_window [title="^__wifi_menu__"] floating enable,move position center,move up 319 px,move right 520 px
 
 # End General
 
@@ -216,14 +246,30 @@ workspace 2 gaps inner 0
 workspace 2 gaps outer 0
 assign [app_id=".*(F|f)irefox.*"] 2
 for_window [app_id=".*(F|f)irefox.*"] focus
+for_window [app_id=".*(F|f)irefox.*"] inhibit_idle fullscreen
 # End Firefox
 
 # Vlc
 workspace 3 gaps inner 0
 workspace 3 gaps outer 0
 assign [app_id=".*(V|v)lc.*"] 3
+for_window [class=".*(V|v)lc.*"] inhibit_idle visible
 # End Vlc
 
+# Game
+for_window [class="steam_app.*"] inhibit_idle visible
+for_window [class=".*(G|g)e(F|f)orce.*"] inhibit_idle visible
+for_window [app_id=".*(M|m)oonlight.*"] inhibit_idle visible
+# End Game
 
-output DP-1 mode 2560x1440@165Hz adaptive_sync on render_bit_depth 10 position 0 0
-output HDMI-A-1 mode 1920x1080@60Hz position -1920 0
+output DP-6 mode 2560x1440@165.080Hz adaptive_sync on render_bit_depth 10 position 0 0
+output DP-7 mode 2560x1440@60Hz adaptive_sync on render_bit_depth 10 position -2560 0
+output DP-5 mode 2560x1440@60Hz adaptive_sync on render_bit_depth 10 enable
+
+workspace 1 output DP-6
+workspace 2 output DP-6
+workspace 3 output DP-6
+workspace 4 output DP-7
+workspace 5 output DP-5
+workspace 6 output DP-7
+

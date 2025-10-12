@@ -132,14 +132,14 @@ bar:
           map:
             conditions:
               temp < 5:
-                string: {text: "{weather}{temp}°C",foreground: *color6,on-click: "{action}"}
+                string: {text: "{weather}{temp}°C",foreground: *color6,on-click: "~/.config/sway/scripts/sway-sensible-terminal --title '__weather__' -o window.dimensions.columns=74 window.dimensions.lines=46 -e bash -c {action}"}
               temp < 15:
-                string: {text: "{weather}{temp}°C",foreground: *color4,on-click: "{action}"}
+                string: {text: "{weather}{temp}°C",foreground: *color4,on-click: "~/.config/sway/scripts/sway-sensible-terminal --title '__weather__' -o window.dimensions.columns=74 window.dimensions.lines=46 -e bash -c {action}"}
               temp < 20:
-                string: {text: "{weather}{temp}°C",foreground: *color2,on-click: "{action}"}
+                string: {text: "{weather}{temp}°C",foreground: *color2,on-click: "~/.config/sway/scripts/sway-sensible-terminal --title '__weather__' -o window.dimensions.columns=74 window.dimensions.lines=46 -e bash -c {action}"}
               temp >= 20:
-                string: {text: "{weather}{temp}°C",foreground: *color1,on-click: "{action}"}
-            default: {string: {text: "{weather}{temp}",foreground: *color1,on-click: "{action}"}}
+                string: {text: "{weather}{temp}°C",foreground: *color1,on-click: "~/.config/sway/scripts/sway-sensible-terminal --title '__weather__' -o window.dimensions.columns=74 window.dimensions.lines=46 -e bash -c {action}"}
+            default: {string: {text: "{weather}{temp}",foreground: *color1,on-click: "~/.config/sway/scripts/sway-sensible-terminal --title '__weather__' -o window.dimensions.columns=74 window.dimensions.lines=46 -e bash -c {action}"}}
 
     - cpu:
         poll-interval: 1000
@@ -178,6 +178,8 @@ bar:
               temp < "60.0":
                 string: {text: " {temp}",foreground: *color5}
               temp >= "60.0":
+                string: {text: " {temp}",foreground: *color1}
+              temp >= "100.0":
                 string: {text: " {temp}",foreground: *color1}
 
     - pipewire:
@@ -306,12 +308,12 @@ bar:
         content: 
           map:
             conditions:
+              type == "open":
+                string: {text: "{icon}",foreground: *color1,on-click: "{action}"}
               type == "wireguard":
                 string: {text: "{icon}",foreground: *color12,on-click: "{action}"}
-              temp == "openvpn":
+              type == "openvpn":
                 string: {text: "{icon}",foreground: *color2,on-click: "{action}"}
-              temp == "none":
-                string: {text: "{icon}",foreground: *color1,on-click: "{action}"}
 
     - network:
         poll-interval: 1000
@@ -319,9 +321,9 @@ bar:
             map:
               conditions:
                 state == "down" && name >= "wl":
-                    - string: {text: "󰤮  ", foreground: *color1,on-click: "~/.config/sway/scripts/sway-sensible-terminal --title '__wifi_menu__' -e sudo wifi-menu {name}"}
+                    - string: {text: "󰤮 ", foreground: *color1,on-click: "~/.config/sway/scripts/sway-sensible-terminal --title '__wifi_menu__' -e sudo wifi-menu {name}"}
                 state == "down":
-                    - string: {text: "  ", foreground: *color1}
+                    - string: {text: "  ", foreground: *color1,on-click: "~/.config/sway/scripts/sway-sensible-terminal --title '__wifi_menu__' -e sudo dhcpcd {name}"}
                 state == "up" && name >= "wl":
                     - ramp:
                         tag: quality
@@ -332,65 +334,67 @@ bar:
                           - string: {text: "󰤥 ", foreground: *color2,on-click: "~/.config/sway/scripts/sway-sensible-terminal --title '__wifi_menu__' -e sudo iftop -i {name}"}
                           - string: {text: "󰤨 ", foreground: *color2,on-click: "~/.config/sway/scripts/sway-sensible-terminal --title '__wifi_menu__' -e sudo iftop -i {name}"}
                     - map:
-                        default: {string: {text: "{dl-speed:kib:.0}KB/s ", foreground: *color4,on-click: "~/.config/sway/scripts/sway-sensible-terminal --title '__wifi_menu__' -e sudo iftop -i {name}"}}
+                        default: {string: {text: "{dl-speed:/8192:.0}KB/s ", foreground: *color4,on-click: "~/.config/sway/scripts/sway-sensible-terminal --title '__wifi_menu__' -e sudo iftop -i {name}"}}
                         conditions:
                           dl-speed > 1073741824:
-                            string: {text: "{dl-speed:gib:.0}GB/s ", foreground: *color4,on-click: "~/.config/sway/scripts/sway-sensible-terminal --title '__wifi_menu__' -e sudo iftop -i {name}"}
+                            string: {text: "{dl-speed:/1073741824:.1}GB/s ", foreground: *color4,on-click: "~/.config/sway/scripts/sway-sensible-terminal --title '__wifi_menu__' -e sudo iftop -i {name}"}
                           dl-speed > 1048576:
-                            string: {text: "{dl-speed:mib:.0}MB/s ", foreground: *color4,on-click: "~/.config/sway/scripts/sway-sensible-terminal --title '__wifi_menu__' -e sudo iftop -i {name}"}
+                            string: {text: "{dl-speed:/1048576:.0}MB/s ", foreground: *color4,on-click: "~/.config/sway/scripts/sway-sensible-terminal --title '__wifi_menu__' -e sudo iftop -i {name}"}
                     - map:
-                        default: {string: {text: "{ul-speed:kib:.0}KB/s ", foreground: *color5,on-click: "~/.config/sway/scripts/sway-sensible-terminal --title '__wifi_menu__' -e sudo iftop -i {name}"}}
+                        default: {string: {text: "{ul-speed:/8192:.0}KB/s ", foreground: *color5,on-click: "~/.config/sway/scripts/sway-sensible-terminal --title '__wifi_menu__' -e sudo iftop -i {name}"}}
                         conditions:
                           ul-speed > 1073741824:
-                            string: {text: "{ul-speed:gib:.0}GB/s ", foreground: *color5,on-click: "~/.config/sway/scripts/sway-sensible-terminal --title '__wifi_menu__' -e sudo iftop -i {name}"}
+                            string: {text: "{ul-speed:/1073741824:.1}GB/s ", foreground: *color5,on-click: "~/.config/sway/scripts/sway-sensible-terminal --title '__wifi_menu__' -e sudo iftop -i {name}"}
                           ul-speed > 1048576:
-                            string: {text: "{ul-speed:mib:.0}MB/s ", foreground: *color5,on-click: "~/.config/sway/scripts/sway-sensible-terminal --title '__wifi_menu__' -e sudo iftop -i {name}"}
+                            string: {text: "{ul-speed:/1048576:.0}MB/s ", foreground: *color5,on-click: "~/.config/sway/scripts/sway-sensible-terminal --title '__wifi_menu__' -e sudo iftop -i {name}"}
 
                 state == "up":
                     - string: {text: " ", foreground: *color2,on-click: "~/.config/sway/scripts/sway-sensible-terminal --title '__wifi_menu__' -e sudo iftop -i {name}"}
                     - map:
-                        default: {string: {text: "{dl-speed:kib:.0}KB/s ", foreground: *color4,on-click: "~/.config/sway/scripts/sway-sensible-terminal --title '__wifi_menu__' -e sudo iftop -i {name}"}}
+                        default: {string: {text: "{dl-speed:/8192:.0}KB/s ", foreground: *color4,on-click: "~/.config/sway/scripts/sway-sensible-terminal --title '__wifi_menu__' -e sudo iftop -i {name}"}}
                         conditions:
                           dl-speed > 1073741824:
-                            string: {text: "{dl-speed:gib:.0}GB/s ", foreground: *color4,on-click: "~/.config/sway/scripts/sway-sensible-terminal --title '__wifi_menu__' -e sudo iftop -i {name}"}
+                            string: {text: "{dl-speed:/1073741824:.1}GB/s ", foreground: *color4,on-click: "~/.config/sway/scripts/sway-sensible-terminal --title '__wifi_menu__' -e sudo iftop -i {name}"}
                           dl-speed > 1048576:
-                            string: {text: "{dl-speed:mib:.0}MB/s ", foreground: *color4,on-click: "~/.config/sway/scripts/sway-sensible-terminal --title '__wifi_menu__' -e sudo iftop -i {name}"}
+                            string: {text: "{dl-speed:/1048576:.0}MB/s ", foreground: *color4,on-click: "~/.config/sway/scripts/sway-sensible-terminal --title '__wifi_menu__' -e sudo iftop -i {name}"}
                     - map:
-                        default: {string: {text: "{ul-speed:kib:.0}KB/s ", foreground: *color5,on-click: "~/.config/sway/scripts/sway-sensible-terminal --title '__wifi_menu__' -e sudo iftop -i {name}"}}
+                        default: {string: {text: "{ul-speed:/8192:.0}KB/s ", foreground: *color5,on-click: "~/.config/sway/scripts/sway-sensible-terminal --title '__wifi_menu__' -e sudo iftop -i {name}"}}
                         conditions:
                           ul-speed > 1073741824:
-                            string: {text: "{ul-speed:gib:.0}GB/s ", foreground: *color5,on-click: "~/.config/sway/scripts/sway-sensible-terminal --title '__wifi_menu__' -e sudo iftop -i {name}"}
+                            string: {text: "{ul-speed:/1073741824:.1}GB/s ", foreground: *color5,on-click: "~/.config/sway/scripts/sway-sensible-terminal --title '__wifi_menu__' -e sudo iftop -i {name}"}
                           ul-speed > 1048576:
-                            string: {text: "{ul-speed:mib:.0}MB/s ", foreground: *color5,on-click: "~/.config/sway/scripts/sway-sensible-terminal --title '__wifi_menu__' -e sudo iftop -i {name}"}
+                            string: {text: "{ul-speed:/1048576:.0}MB/s ", foreground: *color5,on-click: "~/.config/sway/scripts/sway-sensible-terminal --title '__wifi_menu__' -e sudo iftop -i {name}"}
 
     - battery:
-        name: BAT0
+        name: BAT1
         poll-interval: 1000
         content:
           map:
             conditions:
               state == "unknown" && ~model:
-                - string: {text: ""}
+                - string: {text: "󱉝 "}
               state == "unknown" || state == "discharging" || state == "not charging":
                 - ramp:
                     tag: capacity
                     items:
-                      - string: {text: " {capacity}%",foreground: *color1}
-                      - string: {text: " {capacity}%",foreground: *color5}
-                      - string: {text: " {capacity}%",foreground: *color3}
-                      - string: {text: " {capacity}%",foreground: *color4}
-                      - string: {text: " {capacity}%",foreground: *color2}
+                      - string: {text: "󰂎 {capacity}%",foreground: *color1}
+                      - string: {text: "󰁻 {capacity}%",foreground: *color5}
+                      - string: {text: "󰁽 {capacity}%",foreground: *color3}
+                      - string: {text: "󰁿 {capacity}%",foreground: *color4}
+                      - string: {text: "󰂁 {capacity}%",foreground: *color4}
+                      - string: {text: "󰁹 {capacity}%",foreground: *color2}
               state == "charging":
-                map:
-                  conditions:
-                    capacity > 80:
-                      - string:
-                          {text: "CHG HIGH {capacity}% [{estimate}]"}
-                    capacity <= 80:
-                      - string:
-                          {text: "CHG {capacity}% [{estimate}]"}
+              - ramp:
+                    tag: capacity
+                    items:
+                      - string: {text: "󰢟 {capacity}% [{estimate}]",foreground: *color1}
+                      - string: {text: "󰂆 {capacity}% [{estimate}]",foreground: *color5}
+                      - string: {text: "󰂈 {capacity}% [{estimate}]",foreground: *color3}
+                      - string: {text: "󰂉 {capacity}% [{estimate}]",foreground: *color4}
+                      - string: {text: "󰂊 {capacity}% [{estimate}]",foreground: *color4}
+                      - string: {text: "󰂅 {capacity}% [{estimate}]",foreground: *color2}
               state == "full":
-                - string: { text: "  {capacity}%",foreground: *color2 }
+                - string: { text: "󰁹 {capacity}%",foreground: *color2 }
 
     - label:
         content:

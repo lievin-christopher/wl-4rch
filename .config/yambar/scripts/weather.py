@@ -47,6 +47,8 @@ icons = {
          "sand":"🌫️ ",
          "dust":"🌫️ ",
          "light intensity drizzle":"🌫️ ",
+         "light intensity drizzle rain":"🌫️ ",
+         "drizzle":"🌫️ ",
          "volcanic ash":"🌋 ",
          "tornado":"🌪️ "
 }
@@ -64,7 +66,8 @@ def get_weather_forecast(longitude, latitude):
     return resp.json()
     
 try:
-    action = '~/.config/sway/scripts/sway-sensible-terminal --title "__weather__" -o window.dimensions.columns=74 window.dimensions.lines=46 -e bash -c "curl v2.wttr.in/'+str(latitude)+','+str(longitude)+' ;read"'
+    action = "~/.config/sway/scripts/sway-sensible-terminal --title '__weather__' -o window.dimensions.columns=74 window.dimensions.lines=46 -e bash -c "
+    action = "'curl v2.wttr.in/"+str(latitude)+","+str(longitude)+" ;read'"
     weather = get_weather_forecast(longitude,latitude)
     ico = icons.get(weather.get("weather")[0].get("description"))
     if not ico:

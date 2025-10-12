@@ -1,1 +1,5 @@
-{ "CtrlSpace": "command:snippetinsert" }
+{
+    "Alt-/": "lua:comment.comment",
+    "CtrlSpace": "command:snippetinsert",
+    "CtrlUnderscore": "lua:comment.comment"
+}

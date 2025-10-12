@@ -56,6 +56,17 @@ handle_extension() {
         rpa)
             unrpa -l -- "${FILE_PATH}" && exit 5
             exit 1;;
+        rpyc)
+            unrpyc "${FILE_PATH}" && cat ${FILE_PATH::-1} && exit 5
+            exit 1;;
+        pck)
+            godotpcktool -- "${FILE_PATH}" && exit 5
+            exit 1;;
+
+        # Text
+        persistent)
+            read_persistence -- "${FILE_PATH}" && exit 5
+            exit 1;;
 
         # PDF
         pdf)
@@ -112,6 +123,11 @@ handle_image() {
             convert "${FILE_PATH}" "${IMAGE_CACHE_PATH}" && exit 6
             exit 1;;
 
+        # STEX
+        image/x-godot-stex)
+            dd bs=1 skip=32 if="${FILE_PATH}" of="${IMAGE_CACHE_PATH}" && exit 6
+            exit 1;;
+
         # Image
         image/*)
             # `w3mimgdisplay` will be called for all images (unless overriden as above),
@@ -145,6 +161,10 @@ handle_mime() {
             highlight --replace-tabs="${HIGHLIGHT_TABWIDTH}" --out-format="${highlight_format}" \
                 --style="${HIGHLIGHT_STYLE}" -- "${FILE_PATH}" && exit 5
             pygmentize -f "${pygmentize_format}" -O "style=${PYGMENTIZE_STYLE}" -- "${FILE_PATH}" && exit 5
+            exit 2;;
+
+        application/zlib)
+            read_persistent "${FILE_PATH}" && exit 5
             exit 2;;
 
         # Image
