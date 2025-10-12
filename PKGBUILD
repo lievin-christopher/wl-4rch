@@ -28,8 +28,8 @@ depends+=('bash-completion' 'zsh' 'zsh-syntax-highlighting' 'task' 'git' 'htop' 
 depends+=('oh-my-zsh-git') #AUR
 # UI
 ## Wayland
-depends+=('yambar-wayland' 'swayimg' 'sway' 'swaybg' 'wlsunset' 'hyprlock' 'brightnessctl' 'bemenu-wayland')
-depends+=('grimshot' 'yambar-wayland' 'wl-clipboard-rs') #AUR
+depends+=('swayimg' 'sway' 'swaybg' 'wlsunset' 'hyprlock' 'brightnessctl' 'bemenu-wayland')
+depends+=('grimshot' 'yambar-git' 'wl-clipboard-rs') #AUR
 ## Universal
 depends+=('screenfetch' 'pipewire' 'pipewire-audio' 'pipewire-pulse' 'wireplumber' 'python-requests' 'dialog' 'dunst')
 # Fonts
