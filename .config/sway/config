@@ -249,12 +249,14 @@ for_window [app_id=".*(F|f)irefox.*"] focus
 for_window [app_id=".*(F|f)irefox.*"] inhibit_idle fullscreen
 # End Firefox
 
-# Vlc
+# VLC/MPV
 workspace 3 gaps inner 0
 workspace 3 gaps outer 0
 assign [app_id=".*(V|v)lc.*"] 3
+assign [app_id=".*(M|m)pv.*"] 3
 for_window [class=".*(V|v)lc.*"] inhibit_idle visible
-# End Vlc
+for_window [class=".*(M|m)pv.*"] inhibit_idle visible
+# End VLC/MPV
 
 # Game
 for_window [class="steam_app.*"] inhibit_idle visible
