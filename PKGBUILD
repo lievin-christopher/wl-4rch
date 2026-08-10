@@ -1,6 +1,6 @@
 # Maintainer: Lievin Christopher <lievin.christopher@gmail.com>
 pkgname=wl-4rch
-pkgver=0.3
+pkgver=0.4
 pkgrel=0
 pkgdesc="Autoconfig new archlinux installation"
 arch=('x86_64')
@@ -20,7 +20,7 @@ backup=(
        )
 
 # Base
-depends=('linux-hardened' 'linux-hardened-headers' 'linux-hardened-docs' 'grub' 'python' 'exfat-utils' 'ntfs-3g')
+depends=('grub' 'python' 'exfat-utils' 'ntfs-3g')
 # Network
 depends+=('nmap' 'gnu-netcat' 'openssh' 'dnsmasq' 'wpa_supplicant' 'openssl' 'ntp')
 # CLI
@@ -29,7 +29,7 @@ depends+=('oh-my-zsh-git') #AUR
 # UI
 ## Wayland
 depends+=('swayimg' 'sway' 'swaybg' 'wlsunset' 'hyprlock' 'brightnessctl' 'bemenu-wayland')
-depends+=('grimshot' 'yambar-git' 'wl-clipboard-rs') #AUR
+depends+=('yambar-git' 'wl-clipboard-rs') #AUR
 ## Universal
 depends+=('screenfetch' 'pipewire' 'pipewire-audio' 'pipewire-pulse' 'wireplumber' 'python-requests' 'dialog' 'dunst')
 # Fonts
@@ -37,14 +37,18 @@ depends+=('ttf-hack-nerd' 'noto-fonts' 'noto-fonts-cjk' 'noto-fonts-emoji')
 # Virtualisation
 depends+=('qemu' 'lxc' 'arch-install-scripts')
 # GUI Apps
-depends+=('p7zip' 'ranger'  'rxvt-unicode-terminfo' 'alacritty' 'firefox-developer-edition')
+depends+=('p7zip' 'ranger'  'rxvt-unicode-terminfo' 'alacritty')
 # Multimedia
 depends+=('mpv' 'w3m' 'mpd' 'ffmpeg' 'ncmpcpp' 'mpc')
 # Android
 depends+=('android-file-transfer' 'android-udev' 'android-tools')
 # Optional packages
+## Base
+optdepends=('linux-hardened' 'linux-hardened-headers' 'linux-hardened-docs')
 ## Network
-optdepends=('openvpn' 'wireguard-tools')
+optdepends+=('openvpn' 'wireguard-tools')
+## GUI Apps
+optdepends+=('firefox-developer-edition')
 ## CLI
 optdepends+=('bat' 'gtop' 'ldm')
 ## GUI

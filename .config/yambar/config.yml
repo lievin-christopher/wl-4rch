@@ -33,6 +33,7 @@ bar:
   font: Hack Nerd Font:pixelsize=10;2,Noto Color Emoji:pixelsize=10;2
   foreground: *color7
   background: *color0
+  monitor: DP-6
 
   left:
     - i3:

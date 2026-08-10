@@ -62,7 +62,12 @@ handle_extension() {
         pck)
             godotpcktool -- "${FILE_PATH}" && exit 5
             exit 1;;
-
+        rpgmvp)
+            echo 'iVBORw0KGgoAAAANSUhEUg==' | base64 -d > ${IMAGE_CACHE_PATH} && dd if=${FILE_PATH} of=${IMAGE_CACHE_PATH} bs=1 skip=32 seek=16 && cp ${IMAGE_CACHE_PATH} "${FILE_PATH%%.*}.png" && exit 6
+            exit 1;;
+        png_)
+            echo 'iVBORw0KGgoAAAANSUhEUg==' | base64 -d > ${IMAGE_CACHE_PATH} && dd if=${FILE_PATH} of=${IMAGE_CACHE_PATH} bs=1 skip=32 seek=16 && cp ${IMAGE_CACHE_PATH} "${FILE_PATH%%.*}.png" && exit 6
+            exit 1;;
         # Text
         persistent)
             read_persistence -- "${FILE_PATH}" && exit 5

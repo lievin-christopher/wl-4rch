@@ -28,7 +28,7 @@ font pango:hack 8
 floating_modifier $mod
 
 # start a terminal
-bindsym $mod+Return exec ~/.config/sway/scripts/sway-sensible-terminal
+bindsym $mod+Return exec --no-startup-id ~/.config/sway/scripts/sway-sensible-terminal
 
 # kill focused window
 bindsym $mod+Shift+A kill
@@ -214,9 +214,13 @@ bindsym XF86AudioNext  exec playerctl next
 bindsym XF86AudioPrev  exec playerctl previous
 
 bindsym XF86WWW        exec --no-startup-id firefox-developer-edition
+bindsym XF86Explorer   exec --no-startup-id firefox-developer-edition
+
 bindsym XF86Calculator exec --no-startup-id ~/.config/sway/scripts/sway-sensible-terminal -e python
 bindsym $mod+F4        exec --no-startup-id ~/.config/sway/scripts/sway-sensible-terminal -e python
-bindsym XF86Explorer   exec --no-startup-id firefox-developer-edition
+
+bindsym $mod+F11       exec --no-startup-id swaymsg output eDP-1 disable power off dpms off position 0 -1440
+bindsym $mod+F12       exec --no-startup-id swaymsg output eDP-1 enable power on dpms on position 0 0
 
 # General
 exec --no-startup-id dunst
@@ -247,6 +251,9 @@ workspace 2 gaps outer 0
 assign [app_id=".*(F|f)irefox.*"] 2
 for_window [app_id=".*(F|f)irefox.*"] focus
 for_window [app_id=".*(F|f)irefox.*"] inhibit_idle fullscreen
+assign [app_id=".*(L|l)ibrewolf.*"] 2
+for_window [app_id=".*(L|l)ibrewolf.*"] focus
+for_window [app_id=".*(L|l)ibrewolf.*"] inhibit_idle fullscreen
 # End Firefox
 
 # VLC/MPV
@@ -264,6 +271,9 @@ for_window [class=".*(G|g)e(F|f)orce.*"] inhibit_idle visible
 for_window [app_id=".*(M|m)oonlight.*"] inhibit_idle visible
 # End Game
 
+# Social
+assign [class=".*(X|x)ephyr.*"] 5
+
 output DP-6 mode 2560x1440@165.080Hz adaptive_sync on render_bit_depth 10 position 0 0
 output DP-7 mode 2560x1440@60Hz adaptive_sync on render_bit_depth 10 position -2560 0
 output DP-5 mode 2560x1440@60Hz adaptive_sync on render_bit_depth 10 enable
@@ -274,4 +284,3 @@ workspace 3 output DP-6
 workspace 4 output DP-7
 workspace 5 output DP-5
 workspace 6 output DP-7
-
