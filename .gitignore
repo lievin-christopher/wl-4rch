@@ -4,3 +4,5 @@ pkg/
 src/
 *.pkg.tar.zst
 *.lock
+main.zip
+.SRCINFO

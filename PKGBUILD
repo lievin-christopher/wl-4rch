@@ -1,7 +1,7 @@
 # Maintainer: Lievin Christopher <lievin.christopher@gmail.com>
 pkgname=wl-4rch
-pkgver=0.5
-pkgrel=0
+pkgver=0.6
+pkgrel=1
 pkgdesc="Autoconfig new archlinux installation"
 arch=('x86_64')
 license=('MIT')
@@ -63,11 +63,6 @@ backup=(
         "${HOME:1}/.config/sway/lock_night.png"
         "${HOME:1}/.config/sway/scripts/lock.sh"
         "${HOME:1}/.config/sway/scripts/sway-sensible-terminal"
-        "${HOME:1}/.config/yambar/config.yml"
-        "${HOME:1}/.config/yambar/scripts/temp.sh"
-        "${HOME:1}/.config/yambar/scripts/vpn.sh"
-        "${HOME:1}/.config/yambar/scripts/vpn_status.sh"
-        "${HOME:1}/.config/yambar/scripts/weather.py"
         "${HOME:1}/.local/bin/crunchbang-mini_color"
         "${HOME:1}/.local/bin/pacman_color"
         "${HOME:1}/.local/bin/panes_color"
