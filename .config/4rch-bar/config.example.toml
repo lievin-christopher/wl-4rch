@@ -1,0 +1,78 @@
+# Copier dans ~/.config/4rch-bar/config.toml. Toutes les clés sont optionnelles.
+
+[bar]
+output = ""             # écran de la barre, ex. "eDP-1" (swaymsg -t get_outputs) ; vide = écran en position 0,0
+position = "top"        # top | bottom
+height = 17
+interval = 1            # rafraîchissement CPU/RAM/réseau… (secondes)
+
+[workspaces.names]
+# Nom affiché à la place du nom sway (l'ordre reste celui des vrais noms).
+# Par défaut : 1 = \uf120 (terminal), 2 = \uf269 (navigateur), 3 = \U000f057c.
+# Les entrées ci-dessous s'ajoutent aux valeurs par défaut ou les remplacent.
+# "1" = "1"             # revenir au nom d'origine
+# "mail" = "\uf0e0"
+
+[clock]
+date_format = "%a %d %b %Y"   # format strftime (chrono)
+time_format = "%H:%M:%S"
+calendar_months = 4
+
+[caldav]
+# Tâches CalDAV affichées dans le calendrier (échéances + 10 prochaines tâches).
+# task_urls = ["https://cloud.example.org/remote.php/dav/calendars/USER/tasks/"]
+# holidays_url = "https://cloud.example.org/remote.php/dav/calendars/USER/feries/?export"
+# username = "USER"
+# password_command = "pass show nextcloud/4rch-bar"   # ou password = "…"
+
+[weather]
+latitude = 48.8566
+longitude = 2.3522
+interval = 900          # secondes
+wttr_query = "lang=fr"  # ajouté à https://v2.wttr.in/<lat>,<lon>?…
+
+[temperature]
+path = ""               # ex. "/sys/class/hwmon/hwmon3/temp1_input" ; vide = auto
+
+[volume]
+step = 5
+
+[backlight]
+device = ""             # nom dans /sys/class/backlight ; vide = premier trouvé
+step = 5
+
+[vpn]
+interfaces = []         # ex. ["wg0", "tun0"] ; vide = détection auto (WireGuard, tun/tap)
+
+[network]
+interfaces = []         # vide = toutes les interfaces physiques
+# Commande au clic sur une interface selon son état ; {name} = son nom.
+connected_command = "alacritty --title '__wifi_menu__' -e sudo iftop -i {name}"
+deconnected_wifi_command = "alacritty --title '__wifi_menu__' -e sudo wifi-menu {name}"
+deconnected_ethernet_command = "alacritty --title '__wifi_menu__' -e sudo dhcpcd {name}"
+
+[power]
+command = "swaynag -t warning -m 'Session' -Z 'Verrouiller' 'swaylock -f' -Z 'Déconnexion' 'swaymsg exit' -Z 'Redémarrer' 'systemctl reboot' -Z 'Éteindre' 'systemctl poweroff'"
+
+# Palette (RRGGBB ou RRGGBBAA). Seules les couleurs à changer sont nécessaires.
+#   color0  fond                       color7  texte par défaut
+#   color1  heure, power, alertes, calendrier : échéance du jour / en retard
+#   color2  réseau connecté, OpenVPN   color3  batterie (40-60 %)
+#   color4  workspace actif, CPU, download, calendrier : échéance
+#   color5  workspace urgent, RAM, upload, calendrier : aujourd'hui
+#   color6  date                       color8  survol, week-ends du calendrier
+#   color10 jours fériés (calendrier)  color12 WireGuard, numéros de semaine
+# Météo, température CPU, volume, rétro-éclairage et batterie prennent une
+# couleur de la palette selon leur valeur (voir README).
+[colors]
+color0 = "0F1111FF"
+color1 = "BF616AFF"
+color2 = "60B48AFF"
+color3 = "EBBE65FF"
+color4 = "02C9FFFF"
+color5 = "9285FFFF"
+color6 = "76E2FFFF"
+color7 = "DCDCCCFF"
+color8 = "709080FF"
+color10 = "98C379FF"
+color12 = "02B9EBFF"

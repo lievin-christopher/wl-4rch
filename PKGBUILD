@@ -1,6 +1,6 @@
 # Maintainer: Lievin Christopher <lievin.christopher@gmail.com>
 pkgname=wl-4rch
-pkgver=0.4
+pkgver=0.5
 pkgrel=0
 pkgdesc="Autoconfig new archlinux installation"
 arch=('x86_64')
@@ -22,14 +22,14 @@ backup=(
 # Base
 depends=('grub' 'python' 'exfat-utils' 'ntfs-3g')
 # Network
-depends+=('nmap' 'gnu-netcat' 'openssh' 'dnsmasq' 'wpa_supplicant' 'openssl' 'ntp')
+depends+=('nmap' 'gnu-netcat' 'openssh' 'dnsmasq' 'wpa_supplicant' 'openssl')
 # CLI
-depends+=('bash-completion' 'zsh' 'zsh-syntax-highlighting' 'task' 'git' 'htop' 'iftop' 'micro'  'ranger' 'rsync' 'screen' 'lm_sensors')
+depends+=('bash-completion' 'zsh' 'zsh-syntax-highlighting' 'git' 'htop' 'iftop' 'micro'  'ranger' 'rsync' 'screen' 'lm_sensors')
 depends+=('oh-my-zsh-git') #AUR
 # UI
 ## Wayland
 depends+=('swayimg' 'sway' 'swaybg' 'wlsunset' 'hyprlock' 'brightnessctl' 'bemenu-wayland')
-depends+=('yambar-git' 'wl-clipboard-rs') #AUR
+depends+=('wl-clipboard-rs') #AUR
 ## Universal
 depends+=('screenfetch' 'pipewire' 'pipewire-audio' 'pipewire-pulse' 'wireplumber' 'python-requests' 'dialog' 'dunst')
 # Fonts
@@ -48,7 +48,7 @@ optdepends=('linux-hardened' 'linux-hardened-headers' 'linux-hardened-docs')
 ## Network
 optdepends+=('openvpn' 'wireguard-tools')
 ## GUI Apps
-optdepends+=('firefox-developer-edition')
+optdepends+=('firefox-developer-edition' 'lite-xl')
 ## CLI
 optdepends+=('bat' 'gtop' 'ldm')
 ## GUI
@@ -77,7 +77,7 @@ package() {
   mkdir -p $pkgdir$HOME/Music
   rsync -av $srcdir/wl-4rch-main/.ncmpcpp $pkgdir$HOME/
   ## Daily script
-  install -m640 "$srcdir/wl-4rch-main/.taskrc" -t "$pkgdir$HOME/"
+  install -m755 "$srcdir/wl-4rch-main/4rch-bar" -t "$pkgdir/usr/bin/"
   chown -R $USER:users $pkgdir$HOME
   install -m644 "$srcdir/wl-4rch-main/dnsmasq.conf" -t "$pkgdir/etc/"
   install -m644 "$srcdir/wl-4rch-main/default.conf" -t "$pkgdir/etc/lxc/"

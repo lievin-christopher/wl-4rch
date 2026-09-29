@@ -143,6 +143,7 @@ handle_image() {
         video/*)
              # Thumbnail
              ffmpegthumbnailer -i "${FILE_PATH}" -o "${IMAGE_CACHE_PATH}" -s 0 && exit 6
+             ffprobe -hide_banner "${FILE_PATH}" -- 2>&1 && exit 5
              exit 1;;
     esac
 }
@@ -182,6 +183,7 @@ handle_mime() {
         # Video and audio
         video/* | audio/*)
             mediainfo "${FILE_PATH}" && exit 5
+            ffprobe -hide_banner "${FILE_PATH}" -- 2>&1 && exit 5
             exiftool "${FILE_PATH}" && exit 5
             exit 1;;
     esac
