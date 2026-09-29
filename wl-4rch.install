@@ -1,0 +1,24 @@
+_share=/usr/share/wl-4rch
+
+_deploy() {
+  # $1 = source template, $2 = destination; keep the previous file as .pacsave
+  if [ -f "$2" ] && ! cmp -s "$1" "$2"; then
+    cp -a "$2" "$2.pacsave"
+  fi
+  install -m644 "$1" "$2"
+}
+
+post_install() {
+  _deploy "$_share/mpd.conf" /etc/mpd.conf
+  chown mpd /etc/mpd.conf
+  chown -R mpd /opt/mpd
+
+  _deploy "$_share/grub.default" /etc/default/grub
+  grub-mkconfig -o /boot/grub/grub.cfg
+
+  systemctl enable mpd.service mpd.socket lxc-net.service
+}
+
+post_upgrade() {
+  grub-mkconfig -o /boot/grub/grub.cfg
+}

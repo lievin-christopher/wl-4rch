@@ -5,18 +5,19 @@ pkgrel=1
 pkgdesc="Autoconfig new archlinux installation"
 arch=('x86_64')
 license=('MIT')
+install=wl-4rch.install
 source=(https://github.com/lievin-christopher/wl-4rch/archive/refs/heads/main.zip)
 sha512sums=('SKIP')
 backup=(
         "${HOME:1}/.zshrc"
         "${HOME:1}/.dialogrc"
-        "${HOME:1}/.taskrc"
         "etc/default/lxc-net"
         "etc/lxc/default.conf"
         "etc/dnsmasq.conf"
         "etc/dialogrc"
         "etc/sudoers.d/iftop"
         "usr/local/share/fonts/UBraille.ttf"
+        "etc/grub.d/41_bepo"
         "${HOME:1}/.config/4rch-bar/config.example.toml"
         "${HOME:1}/.config/alacritty/alacritty.toml"
         "${HOME:1}/.config/bemenu/powermenu/logout"
@@ -81,6 +82,11 @@ backup=(
         "${HOME:1}/.local/share/unrpyc/unrpyc.py"
         "${HOME:1}/.ncmpcpp/config"
        )
+# Same files are also shipped in /etc/skel for future users
+for _f in "${backup[@]}"; do
+  [[ $_f == "${HOME:1}/"* ]] && backup+=("etc/skel/${_f#"${HOME:1}/"}")
+done
+unset _f
 
 # Base
 depends=('grub' 'python' 'exfat-utils' 'ntfs-3g')
@@ -124,50 +130,42 @@ optdepends+=('krita' 'vlc')
 optdepends+=('rxvt-unicode-patched-with-scrolling' 'urxvt-perls' 'urxvt-resize-font-git')
 
 package() {
-  ls $srcdir/wl-4rch-main
-  mkdir -p $pkgdir$HOME/
-  mkdir -p $pkgdir/etc/{lxc,default}
-  chmod 700 $pkgdir$HOME/
-  # Install config files and directories
-  rsync -av $srcdir/wl-4rch-main/.config $pkgdir$HOME/
-  chmod 700 $pkgdir$HOME/.config
-  rsync -av $srcdir/wl-4rch-main/.local $pkgdir$HOME/
-  chmod 700 $pkgdir$HOME/.local
-  ## mpd + ncmpcpp
-  mkdir -p $pkgdir/opt/mpd/playlists
-  touch $pkgdir/opt/mpd/mpd.log $pkgdir/opt/mpd/mpd.db
-  mkdir -p $pkgdir/opt/mpd/lyrics
-  mkdir -p $pkgdir$HOME/Music
-  rsync -av $srcdir/wl-4rch-main/.ncmpcpp $pkgdir$HOME/
-  install -m644 "$srcdir/wl-4rch-main/.zshrc" -t "$pkgdir$HOME/"
-  ## Daily script
-  mkdir -p "$pkgdir/usr/bin"
-  install -m755 "$srcdir/wl-4rch-main/4rch-bar" -t "$pkgdir/usr/bin/"
-  chown -R $USER:users $pkgdir$HOME
-  install -m644 "$srcdir/wl-4rch-main/dnsmasq.conf" -t "$pkgdir/etc/"
-  install -m644 "$srcdir/wl-4rch-main/default.conf" -t "$pkgdir/etc/lxc/"
-  install -m644 "$srcdir/wl-4rch-main/lxc-net" -t "$pkgdir/etc/default/"
-  install -Dm440 "$srcdir/wl-4rch-main/iftop" "$pkgdir/etc/sudoers.d/iftop"
-  dialog --create-rc $pkgdir$HOME/.dialogrc
-  dialog --create-rc $pkgdir/etc/dialogrc
-  mkdir -p "$pkgdir/usr/local/share/fonts/"
-  install -m644 "$srcdir/wl-4rch-main/UBraille.ttf" -t "$pkgdir/usr/local/share/fonts/"
-}
+  local _src="$srcdir/wl-4rch-main"
 
-post_install() {
-	echo -en "music_directory " > $pkgdir/etc/mpd.conf
-	echo "\"$HOME/Music\"" >>  $pkgdir/etc/mpd.conf
-	cat $srcdir/wl-4rch-main/mpd.conf >>  $pkgdir/etc/mpd.conf
-    sed --in-place=.pacsave 's/arch.pool.ntp.org/fr.pool.ntp.org iburst/' $pkgdir/etc/ntp.conf 
-	chown mpd /etc/mpd.conf
-	chown -R mpd /opt/mpd
-	install -m644 "$srcdir/wl-4rch-main/bepo.gkb" "/boot/grub/bepo.gkb"
-	install -m644 "$srcdir/wl-4rch-main/grub" "/etc/default/grub"
-	echo "insmod keylayouts" >> /etc/grub.d/40_custom
-	echo "keymap /boot/grub/bepo.gkb" >> /etc/grub.d/40_custom
-	grub-mkconfig -o /boot/grub/grub.cfg
-	systemctl enable mpd.service
-	systemctl enable mpd.socket
-	systemctl enable lxc-net.service
-	systemctl enable ntpd.service
+  # User config: current user + /etc/skel for future users
+  install -d -m755 "$pkgdir$HOME" "$pkgdir/etc/skel"
+  local _dest
+  for _dest in "$pkgdir$HOME" "$pkgdir/etc/skel"; do
+    install -d -m700 "$_dest/.config" "$_dest/.local"
+    cp -a "$_src/.config/." "$_dest/.config/"
+    cp -a "$_src/.local/." "$_dest/.local/"
+    cp -a "$_src/.ncmpcpp" "$_dest/"
+    install -m644 "$_src/.zshrc" -t "$_dest/"
+    install -d "$_dest/Music"
+    dialog --create-rc "$_dest/.dialogrc"
+  done
+  chown -R "$(id -u):$(id -g)" "$pkgdir$HOME"
+
+  # mpd (final /etc/mpd.conf is deployed by the .install hook)
+  install -d "$pkgdir/opt/mpd/playlists" "$pkgdir/opt/mpd/lyrics"
+  touch "$pkgdir/opt/mpd/mpd.log" "$pkgdir/opt/mpd/mpd.db"
+  install -d "$pkgdir/usr/share/wl-4rch"
+  {
+    echo "music_directory \"$HOME/Music\""
+    cat "$_src/mpd.conf"
+  } > "$pkgdir/usr/share/wl-4rch/mpd.conf"
+
+  # System config
+  install -Dm755 "$_src/4rch-bar" -t "$pkgdir/usr/bin/"
+  install -Dm644 "$_src/dnsmasq.conf" -t "$pkgdir/etc/"
+  install -Dm644 "$_src/default.conf" -t "$pkgdir/etc/lxc/"
+  install -Dm644 "$_src/lxc-net" -t "$pkgdir/etc/default/"
+  install -Dm440 "$_src/iftop" "$pkgdir/etc/sudoers.d/iftop"
+  dialog --create-rc "$pkgdir/etc/dialogrc"
+  install -Dm644 "$_src/UBraille.ttf" -t "$pkgdir/usr/local/share/fonts/"
+
+  # grub (bepo keymap + default config applied by the .install hook)
+  install -Dm644 "$_src/bepo.gkb" "$pkgdir/boot/grub/bepo.gkb"
+  install -Dm644 "$_src/grub" "$pkgdir/usr/share/wl-4rch/grub.default"
+  install -Dm755 "$_src/41_bepo" "$pkgdir/etc/grub.d/41_bepo"
 }
