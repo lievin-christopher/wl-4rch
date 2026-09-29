@@ -77,6 +77,7 @@ package() {
   mkdir -p $pkgdir$HOME/Music
   rsync -av $srcdir/wl-4rch-main/.ncmpcpp $pkgdir$HOME/
   ## Daily script
+  mkdir -p "$pkgdir/usr/bin"
   install -m755 "$srcdir/wl-4rch-main/4rch-bar" -t "$pkgdir/usr/bin/"
   chown -R $USER:users $pkgdir$HOME
   install -m644 "$srcdir/wl-4rch-main/dnsmasq.conf" -t "$pkgdir/etc/"
