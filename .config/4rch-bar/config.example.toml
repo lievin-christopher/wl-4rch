@@ -1,69 +1,101 @@
-# Copier dans ~/.config/4rch-bar/config.toml. Toutes les clés sont optionnelles.
+# Copy to ~/.config/4rch-bar/config.toml. Every key is optional.
+# Any module can be turned off with "disable = true" in its section:
+# [workspaces] [clock] [tray] [weather] [cpu] [memory] [temperature] [volume]
+# [backlight] [vpn] [network] [battery] [power].
 
 [bar]
-output = ""             # écran de la barre, ex. "eDP-1" (swaymsg -t get_outputs) ; vide = écran en position 0,0
+output = ""             # output showing the bar, e.g. "eDP-1" (swaymsg -t get_outputs); empty = output at position 0,0
 position = "top"        # top | bottom
 height = 17
-interval = 1            # rafraîchissement CPU/RAM/réseau… (secondes)
+interval = 1            # CPU/RAM/network… refresh period (seconds)
+# Space left by disabled modules: "collapse" (none) or "reserve" (an empty
+# area as wide as the module). Only right-hand modules are affected: on the
+# left and in the center, both give the same result.
+disabled_modules = "collapse"
+
+[workspaces]
+disable = false
 
 [workspaces.names]
-# Nom affiché à la place du nom sway (l'ordre reste celui des vrais noms).
-# Par défaut : 1 = \uf120 (terminal), 2 = \uf269 (navigateur), 3 = \U000f057c.
-# Les entrées ci-dessous s'ajoutent aux valeurs par défaut ou les remplacent.
-# "1" = "1"             # revenir au nom d'origine
+# Label shown instead of the sway name (sorting still uses the real names).
+# Defaults: 1 = \uf120 (terminal), 2 = \uf269 (browser), 3 = \U000f057c.
+# Entries below are added to the defaults or override them.
+# "1" = "1"             # back to the original name
 # "mail" = "\uf0e0"
 
 [clock]
-date_format = "%a %d %b %Y"   # format strftime (chrono)
+disable = false               # also disables the calendar
+date_format = "%a %d %b %Y"   # strftime format (chrono)
 time_format = "%H:%M:%S"
 calendar_months = 4
 
+[tray]
+# System tray (drawer left of the weather).
+disable = false
+
 [caldav]
-# Tâches CalDAV affichées dans le calendrier (échéances + 10 prochaines tâches).
+# CalDAV tasks shown in the calendar (due dates + next 10 tasks).
 # task_urls = ["https://cloud.example.org/remote.php/dav/calendars/USER/tasks/"]
 # holidays_url = "https://cloud.example.org/remote.php/dav/calendars/USER/feries/?export"
 # username = "USER"
-# password_command = "pass show nextcloud/4rch-bar"   # ou password = "…"
+# password_command = "pass show nextcloud/4rch-bar"   # or password = "…"
 
 [weather]
+disable = false
 latitude = 48.8566
 longitude = 2.3522
-interval = 900          # secondes
-wttr_query = "lang=fr"  # ajouté à https://v2.wttr.in/<lat>,<lon>?…
+interval = 900          # seconds
+wttr_query = "lang=fr"  # appended to https://v2.wttr.in/<lat>,<lon>?…
+
+[cpu]
+disable = false
+
+[memory]
+disable = false
 
 [temperature]
-path = ""               # ex. "/sys/class/hwmon/hwmon3/temp1_input" ; vide = auto
+disable = false
+path = ""               # e.g. "/sys/class/hwmon/hwmon3/temp1_input"; empty = auto
 
 [volume]
+disable = false
 step = 5
 
 [backlight]
-device = ""             # nom dans /sys/class/backlight ; vide = premier trouvé
+disable = false
+device = ""             # name in /sys/class/backlight; empty = first found
 step = 5
 
 [vpn]
-interfaces = []         # ex. ["wg0", "tun0"] ; vide = détection auto (WireGuard, tun/tap)
+disable = false
+interfaces = []         # e.g. ["wg0", "tun0"]; empty = auto-detect (WireGuard, tun/tap)
 
 [network]
-interfaces = []         # vide = toutes les interfaces physiques
-# Commande au clic sur une interface selon son état ; {name} = son nom.
+disable = false
+interfaces = []         # empty = all physical interfaces
+# Command run on click, depending on the interface state; {name} = its name.
 connected_command = "alacritty --title '__wifi_menu__' -e sudo iftop -i {name}"
 deconnected_wifi_command = "alacritty --title '__wifi_menu__' -e sudo wifi-menu {name}"
 deconnected_ethernet_command = "alacritty --title '__wifi_menu__' -e sudo dhcpcd {name}"
 
+[battery]
+disable = false
+
 [power]
+disable = false
 command = "swaynag -t warning -m 'Session' -Z 'Verrouiller' 'swaylock -f' -Z 'Déconnexion' 'swaymsg exit' -Z 'Redémarrer' 'systemctl reboot' -Z 'Éteindre' 'systemctl poweroff'"
 
-# Palette (RRGGBB ou RRGGBBAA). Seules les couleurs à changer sont nécessaires.
-#   color0  fond                       color7  texte par défaut
-#   color1  heure, power, alertes, calendrier : échéance du jour / en retard
-#   color2  réseau connecté, OpenVPN   color3  batterie (40-60 %)
-#   color4  workspace actif, CPU, download, calendrier : échéance
-#   color5  workspace urgent, RAM, upload, calendrier : aujourd'hui
-#   color6  date                       color8  survol, week-ends du calendrier
-#   color10 jours fériés (calendrier)  color12 WireGuard, numéros de semaine
-# Météo, température CPU, volume, rétro-éclairage et batterie prennent une
-# couleur de la palette selon leur valeur (voir README).
+# Palette (RRGGBB or RRGGBBAA). Only the colors to change are needed.
+#   color0  background                 color7  default text, tray
+#   color1  power, alerts              color9  time (default: color1)
+#   color11 calendar: due today / overdue (default: color1)
+#   color2  network connected, OpenVPN color3  battery (40-60 %)
+#   color4  focused workspace, CPU, download, calendar: due date
+#   color5  urgent workspace, RAM, upload, calendar: today, tray attention
+#   color6  date                       color8  hover, calendar weekends, empty tray
+#   color10 holidays (calendar)        color12 WireGuard, week numbers
+# Weather, CPU temperature, volume, backlight and battery pick a palette
+# color according to their value (see README).
 [colors]
 color0 = "0F1111FF"
 color1 = "BF616AFF"
@@ -74,5 +106,7 @@ color5 = "9285FFFF"
 color6 = "76E2FFFF"
 color7 = "DCDCCCFF"
 color8 = "709080FF"
+# color9 = "BF616AFF"   # time; unset = color1
 color10 = "98C379FF"
+# color11 = "BF616AFF"  # due today / overdue; unset = color1
 color12 = "02B9EBFF"
